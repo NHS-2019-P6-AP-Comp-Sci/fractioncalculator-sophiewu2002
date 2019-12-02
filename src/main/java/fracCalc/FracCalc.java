@@ -155,34 +155,38 @@ public class FracCalc {
 		int answerNumerator = 0;
 		int answerDenominator = 0;
 
-		/* when division */ if (operator.contentEquals("/")) {
+		/* when division */
+		if (operator.contentEquals("/")) {
 			int newNumerator_2 = denominator_2;
 			int newDenominator_2 = numerator_2;
 			answerNumerator = numerator_1 * newNumerator_2;
 			answerDenominator = denominator_1 * newDenominator_2;
-		} /* when multiplication */ else if (operator.contentEquals("*")) {
+		} /* when multiplication */
+		else if (operator.contentEquals("*")) {
 			answerNumerator = numerator_1 * numerator_2;
 			answerDenominator = denominator_1 * denominator_2;
 		}
 
-		/* - first operand, - second operand */if (locationOfNegativeSign1 != -1 && locationOfNegativeSign2 != -1) {
-
-		} /* - first operand, + second operand */else if (locationOfNegativeSign1 != -1
-				&& locationOfNegativeSign2 == -1) {
+		/* - first operand, - second operand */
+		if (locationOfNegativeSign1 != -1 && locationOfNegativeSign2 != -1) {
+		} /* - first operand, + second operand */
+		else if (locationOfNegativeSign1 != -1 && locationOfNegativeSign2 == -1) {
 			answerNumerator = answerNumerator * -1;
-		} /* + first operand, - second operand */ else if (locationOfNegativeSign1 == -1
-				&& locationOfNegativeSign2 != -1) {
+		} /* + first operand, - second operand */
+		else if (locationOfNegativeSign1 == -1 && locationOfNegativeSign2 != -1) {
 			answerNumerator = answerNumerator * -1;
 		}
 
-		/* - first operand, + second operand */ if (locationOfNegativeSign1 != -1 && locationOfNegativeSign2 == -1) {
+		/* - first operand, + second operand */
+		if (locationOfNegativeSign1 != -1 && locationOfNegativeSign2 == -1) {
 			numerator_1 = numerator_1 * -1;
-		} /* + first operand, - second operand */ else if (locationOfNegativeSign1 == -1
-				&& locationOfNegativeSign2 != -1) {
+		} /* + first operand, - second operand */
+		else if (locationOfNegativeSign1 == -1 && locationOfNegativeSign2 != -1) {
 			numerator_2 = numerator_2 * -1;
 		}
 
-		/* when addition */ if (operator.equals("+")) {
+		/* when addition */
+		if (operator.equals("+")) {
 			answerDenominator = denominator_1 * denominator_2;
 			numerator_1 = numerator_1 * denominator_2;
 			numerator_2 = numerator_2 * denominator_1;
@@ -191,19 +195,63 @@ public class FracCalc {
 				numerator_2 = numerator_2 * -1;
 			}
 			answerNumerator = numerator_1 + numerator_2;
-		} /* when minus */ else if (operator.equals("-")) {
+		} /* when minus */
+		else if (operator.equals("-")) {
 			answerDenominator = denominator_1 * denominator_2;
 			numerator_1 = numerator_1 * denominator_2;
 			numerator_2 = numerator_2 * denominator_1;
-			/* - first operand, - second operand */if (locationOfNegativeSign1 != -1 && locationOfNegativeSign2 != -1) {
+			/* - first operand, - second operand */
+			if (locationOfNegativeSign1 != -1 && locationOfNegativeSign2 != -1) {
 				numerator_1 = numerator_1 * -1;
 				numerator_2 = numerator_2 * -1;
 			}
 			answerNumerator = numerator_1 - numerator_2;
 		}
 
-//		String answer = locationOfDivisionSign2 + " " + denominator2;
-		String answer = "" + answerNumerator + "/" + answerDenominator;
+//		Initial Simplification of the fractional answer
+		int answerWholeNumber = answerNumerator / answerDenominator;
+		answerNumerator = answerNumerator % answerDenominator;
+
+		if (answerNumerator < 0) {
+			answerNumerator *= -1;
+		}
+
+		int greatestCommonFactor = 1;
+
+//		Find the Greatest Common Factor so that fraction can be simplified
+		for (int i = 1; i <= answerNumerator; i++) {
+			int a = answerNumerator % i;
+			int b = answerDenominator % i;
+			if (a == b && a == 0) {
+				int factor = i;
+				if (factor >= greatestCommonFactor) {
+					greatestCommonFactor = factor;
+				}
+			}
+		}
+
+//		Simplifying the fraction further 
+		if (greatestCommonFactor >= 1) {
+			answerNumerator = answerNumerator / greatestCommonFactor;
+			answerDenominator = answerDenominator / greatestCommonFactor;
+		}
+
+		String answer = " ";
+
+//		Changing the format of the answer based on the answer
+		if (answerWholeNumber == 0) {
+			if (answerNumerator == 0) {
+				answer = "0";
+			} else {
+				answer = answerNumerator + "/" + answerDenominator;
+			}
+		} else {
+			if (answerNumerator == 0) {
+				answer = answerWholeNumber + "";
+			} else {
+				answer = answerWholeNumber + "_" + answerNumerator + "/" + answerDenominator;
+			}
+		}
 
 		return answer;
 	}
